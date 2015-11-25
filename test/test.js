@@ -17,7 +17,7 @@
   app.use(expressResponseError());
 
   app.get('*', function(req, res, next) {
-    return res["throw"](req.query.message || 'not message', req.query.statusCode);
+    return res.error(req.query.message || 'not message', req.query.statusCode);
   });
 
   test = supertest(app);

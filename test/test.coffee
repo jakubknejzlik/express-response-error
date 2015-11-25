@@ -9,7 +9,7 @@ app = new express()
 app.use(expressResponseError())
 
 app.get('*',(req,res,next)->
-  res.throw(req.query.message or 'not message',req.query.statusCode)
+  res.error(req.query.message or 'not message',req.query.statusCode)
 )
 
 test = supertest(app)
