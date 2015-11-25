@@ -5,7 +5,7 @@
       options = {};
     }
     return function(req, res, next) {
-      res["throw"] = function(message, statusCode) {
+      res.error = function(message, statusCode) {
         if (statusCode == null) {
           statusCode = 400;
         }
@@ -15,7 +15,7 @@
       };
       next();
       return res.notFound = function(message) {
-        return res["throw"](message, 404);
+        return res.error(message, 404);
       };
     };
   };
