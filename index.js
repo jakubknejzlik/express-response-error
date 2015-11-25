@@ -4,12 +4,18 @@
 
   responses = {
     error: function(message, statusCode) {
+      var err, payload;
       if (statusCode == null) {
         statusCode = 400;
       }
-      return this.status(statusCode).send({
+      payload = {
         error: message
-      });
+      };
+      if (process.env.NODE_ENV !== 'production' || this.req.query.debug) {
+        err = new Error(err.message);
+        payload.stack = err.stack;
+      }
+      return this.status(statusCode).send(payload);
     },
     unauthorized: function(message) {
       return this.error(message, 401);

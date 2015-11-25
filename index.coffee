@@ -1,6 +1,10 @@
 responses = {
   error:(message,statusCode = 400)->
-    @status(statusCode).send({error:message})
+    payload = {error:message}
+    if process.env.NODE_ENV isnt 'production' or @req.query.debug
+      err = new Error(err.message)
+      payload.stack = err.stack
+    @status(statusCode).send(payload)
   unauthorized:(message)->
     @error(message,401)
   paymentRequired:(message)->
