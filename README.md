@@ -14,7 +14,11 @@ Send errors easily right from response object (eg. res.notFound('not found') -> 
  app.use(expressResponseError())
 
  app.get('/test/forbidden',(req,res,next)->
-   res.forbidden('this resource is forbidden')
+  res.forbidden('this resource is forbidden')
+ )
+ 
+ app.get('/test/custom',(req,res,next)->
+  res.error('something bad has happened',444)
  )
 
  app.listen(process.env.PORT)
