@@ -4,7 +4,7 @@
 
   responses = {
     error: function(message, statusCode) {
-      var error, payload;
+      var err, error, error1, payload;
       if (statusCode == null) {
         statusCode = 400;
       }
@@ -12,7 +12,12 @@
       if (message instanceof Error) {
         error = message;
       } else {
-        error = new Error(message);
+        try {
+          throw new Error(message);
+        } catch (error1) {
+          err = error1;
+          error = err;
+        }
       }
       payload = {
         error: error.message

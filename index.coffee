@@ -4,7 +4,10 @@ responses = {
     if message instanceof Error
       error = message
     else
-      error = new Error(message)
+      try
+        throw new Error(message)
+      catch err
+        error = err
     payload = {error:error.message}
     if process.env.NODE_ENV isnt 'production' or @req.query.debug
       payload.stack = error.stack
