@@ -6,7 +6,7 @@ responses = {
     else
       error = new Error(message)
     payload = {error:error.message}
-    if process.env.NODE_ENV isnt 'production' or @req.query.debug
+    if process.env.NODE_ENV isnt 'production' or process.env.RESPONSE_ERROR_LOGGING or @req.query.debug
       payload.stack = error.stack
     @status(statusCode).send(payload)
   unauthorized:(message)->

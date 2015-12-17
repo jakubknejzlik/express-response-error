@@ -17,7 +17,7 @@
       payload = {
         error: error.message
       };
-      if (process.env.NODE_ENV !== 'production' || this.req.query.debug) {
+      if (process.env.NODE_ENV !== 'production' || process.env.RESPONSE_ERROR_LOGGING || this.req.query.debug) {
         payload.stack = error.stack;
       }
       return this.status(statusCode).send(payload);
