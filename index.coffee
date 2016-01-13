@@ -7,13 +7,12 @@ responses = {
     if message instanceof Error
       error = message
     else
-      try
-        throw new Error(message)
-      catch err
-        error = err
+      error = new Error(message)
     payload = {error:error.message}
     if process.env.NODE_ENV isnt 'production' or @req.query.debug
       payload.stack = error.stack
+    if process.env.RESPONSE_ERROR_LOGGING
+      console.error(error)
     if options.curlify
       payload.curl = curlify(@req)
 
