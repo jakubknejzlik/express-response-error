@@ -11,10 +11,10 @@ responses = {
     payload = {error:error.message}
     if process.env.NODE_ENV isnt 'production' or @req.query.debug
       payload.stack = error.stack
-    if process.env.RESPONSE_ERROR_LOGGING
-      console.error(error)
     if options.curlify
       payload.curl = curlify(@req)
+    if process.env.RESPONSE_ERROR_LOGGING or options.logging
+      console.error('ResponseError',payload)
 
     @status(statusCode).send(payload)
 

@@ -30,6 +30,7 @@ Send errors easily right from response object (eg. res.notFound('not found') -> 
 # Options
 
  * `curlify` - return *curl* for request
+ * `logging` - log every error payload with *console.error*
 
 # Debug
 

@@ -23,11 +23,11 @@
       if (process.env.NODE_ENV !== 'production' || this.req.query.debug) {
         payload.stack = error.stack;
       }
-      if (process.env.RESPONSE_ERROR_LOGGING) {
-        console.error(error);
-      }
       if (options.curlify) {
         payload.curl = curlify(this.req);
+      }
+      if (process.env.RESPONSE_ERROR_LOGGING || options.logging) {
+        console.error('ResponseError', payload);
       }
       return this.status(statusCode).send(payload);
     },
