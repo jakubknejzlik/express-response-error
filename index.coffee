@@ -1,5 +1,8 @@
+curlify = require('request-as-curl')
+
 responses = {
   error:(message,statusCode = 400)->
+    options = @req._responseErrorOptions or {}
     error = null
     if message instanceof Error
       error = message
@@ -11,7 +14,11 @@ responses = {
     payload = {error:error.message}
     if process.env.NODE_ENV isnt 'production' or @req.query.debug
       payload.stack = error.stack
+    if options.curlify
+      payload.curl = curlify(@req)
+
     @status(statusCode).send(payload)
+
   unauthorized:(message)->
     @error(message,401)
   paymentRequired:(message)->
@@ -64,6 +71,8 @@ responses = {
 
 module.exports = (options = {})->
   return (req,res,next)->
+
+    req._responseErrorOptions = options
 
     for name,responseHandler of responses
       res[name] = responseHandler

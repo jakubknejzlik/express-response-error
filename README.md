@@ -7,23 +7,29 @@ Send errors easily right from response object (eg. res.notFound('not found') -> 
 # Example
 
 ```
- express = require('express')
- expressResponseError = require('express-response-error')
+ var express = require('express');
+ var expressResponseError = require('express-response-error');
 
- app = new express()
- app.use(expressResponseError())
+ app = new express();
+ 
+ var options = {};
+ app.use(expressResponseError(options));
 
  app.get('/test/forbidden',(req,res,next)->
-  res.forbidden('this resource is forbidden')
+  res.forbidden('this resource is forbidden');
  )
  
  app.get('/test/custom',(req,res,next)->
-  res.error('something bad has happened',444)
+  res.error('something bad has happened',444);
  )
 
  app.listen(process.env.PORT)
 
 ```
+
+# Options
+
+ * `curlify` - return *curl* for request
 
 # Debug
 

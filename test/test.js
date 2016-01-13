@@ -14,19 +14,31 @@
 
   app = new express();
 
-  app.use(expressResponseError());
+  app.get('/curlified*', expressResponseError({
+    curlify: true
+  }), function(req, res) {
+    return res.error(req.query.message || 'no message', req.query.statusCode);
+  });
 
-  app.get('*', function(req, res, next) {
+  app.get('*', expressResponseError(), function(req, res) {
     return res.error(req.query.message || 'no message', req.query.statusCode);
   });
 
   test = supertest(app);
 
   describe('middleware', function() {
-    return it('should return status code', function(done) {
+    it('should return status code', function(done) {
       return async.forEach([200, 201, 400], function(status, cb) {
         return test.get('/?message=status-' + status + '&statusCode=' + status).expect(status).expect(function(res) {
           return assert.equal(res.body.error, 'status-' + status);
+        }).end(cb);
+      }, done);
+    });
+    return it('should return status code', function(done) {
+      return async.forEach([200, 201, 400], function(status, cb) {
+        return test.get('/curlified/?message=status-' + status + '&curlify').expect(400).expect(function(res) {
+          assert.equal(res.body.error, 'status-' + status);
+          return assert.ok(res.body.curl);
         }).end(cb);
       }, done);
     });
