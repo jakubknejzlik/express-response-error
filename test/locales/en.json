@@ -1,0 +1,6 @@
+{
+	"TEST_RESPONSE": "this is test response",
+	"status-200": "status-200",
+	"status-201": "status-201",
+	"status-400": "status-400"
+}

@@ -8,7 +8,17 @@ responses = {
       error = message
     else
       error = new Error(message)
-    payload = {error:error.message}
+
+
+    errorMessage = error.message
+
+    if options.translate is 'i18n' and @__
+      errorMessage = @__(errorMessage)
+    else if typeof options.translate is 'function'
+      errorMessage = options.translate(errorMessage)
+
+    payload = {error:errorMessage}
+
     if process.env.NODE_ENV isnt 'production' or @req.query.debug
       payload.stack = error.stack
     if options.curlify

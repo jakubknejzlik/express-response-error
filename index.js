@@ -6,7 +6,7 @@
 
   responses = {
     error: function(message, statusCode) {
-      var error, options, payload;
+      var error, errorMessage, options, payload;
       if (statusCode == null) {
         statusCode = 400;
       }
@@ -17,8 +17,14 @@
       } else {
         error = new Error(message);
       }
+      errorMessage = error.message;
+      if (options.translate === 'i18n' && this.__) {
+        errorMessage = this.__(errorMessage);
+      } else if (typeof options.translate === 'function') {
+        errorMessage = options.translate(errorMessage);
+      }
       payload = {
-        error: error.message
+        error: errorMessage
       };
       if (process.env.NODE_ENV !== 'production' || this.req.query.debug) {
         payload.stack = error.stack;
