@@ -26,7 +26,7 @@
       payload = {
         error: errorMessage
       };
-      if (process.env.NODE_ENV !== 'production' || this.req.query.debug) {
+      if (process.env.NODE_ENV !== 'production' || this.req.query.debug || options.stackLogging) {
         payload.stack = error.stack;
       }
       if (options.curlify) {

@@ -19,7 +19,7 @@ responses = {
 
     payload = {error:errorMessage}
 
-    if process.env.NODE_ENV isnt 'production' or @req.query.debug
+    if process.env.NODE_ENV isnt 'production' or @req.query.debug or options.stackLogging
       payload.stack = error.stack
     if options.curlify
       payload.curl = curlify(@req)

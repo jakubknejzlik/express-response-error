@@ -31,6 +31,7 @@ Send errors easily right from response object (eg. res.notFound('not found') -> 
 
  * `curlify` - return *curl* for request
  * `logging` - log every error payload with *console.error*
+ * `stackLogging` - include error stack in payload
  * `translation` - translate error message (default `null`)
     - specify translate function accepting one argument
     - string `i18n` to use translation for [i18n](https://www.npmjs.com/package/i18n))
