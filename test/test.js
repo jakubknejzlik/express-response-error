@@ -23,16 +23,16 @@
 
   app.use(i18n.init);
 
-  app.get('/curlified*', expressResponseError({
-    curlify: true
-  }), function(req, res) {
-    return res.error(req.query.message || 'no message', req.query.statusCode);
-  });
-
   app.get('*', expressResponseError({
     translate: 'i18n'
   }), function(req, res) {
     return res.error(req.query.message || 'no message', req.query.statusCode);
+  });
+
+  app.use(function(err, req, res, next) {
+    return res.status(err.code).send({
+      error: err.message
+    });
   });
 
   test = supertest(app);
@@ -45,15 +45,7 @@
         }).end(cb);
       }, done);
     });
-    it('should return status code', function(done) {
-      return async.forEach([200, 201, 400], function(status, cb) {
-        return test.get('/curlified/?message=status-' + status + '&curlify').expect(400).expect(function(res) {
-          assert.equal(res.body.error, 'status-' + status);
-          return assert.ok(res.body.curl);
-        }).end(cb);
-      }, done);
-    });
-    return it('should return status code', function(done) {
+    return it('should return test response', function(done) {
       return async.forEach([200, 201, 400], function(status, cb) {
         return test.get('/?message=TEST_RESPONSE&statusCode=' + status).expect(status).expect(function(res) {
           return assert.equal(res.body.error, 'this is test response');

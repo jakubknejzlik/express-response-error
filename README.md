@@ -22,6 +22,11 @@ Send errors easily right from response object (eg. res.notFound('not found') -> 
  app.get('/test/custom',(req,res,next)->
   res.error('something bad has happened',444);
  )
+ 
+ // handle formatting to suite your needs
+ app.use((err,req,res,next)->
+   res.status(err.code).send({error: err.message})
+ )
 
  app.listen(process.env.PORT)
 
@@ -29,7 +34,7 @@ Send errors easily right from response object (eg. res.notFound('not found') -> 
 
 # Options
 
- * `curlify` - return *curl* for request
+ * ~~`curlify` - return *curl* for request~~
  * `logging` - log every error payload with *console.error*
  * `stackLogging` - include error stack in payload
  * `translation` - translate error message (default `null`)

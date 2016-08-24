@@ -1,15 +1,17 @@
 curlify = require('request-as-curl')
 
+class ResponseError extends Error
+  constructor: (@message, @code = 400)->
+    super
+
+  toString: () ->
+    return "ResponseError (#{@code}): #{@message}"
+
 responses = {
   error:(message,statusCode = 400)->
     options = @req._responseErrorOptions or {}
-    error = null
-    if message instanceof Error
-      error = message
-    else
-      error = new Error(message)
 
-
+    error = if message instanceof Error then message else new Error(message)
     errorMessage = error.message
 
     if options.translate is 'i18n' and @__
@@ -17,16 +19,15 @@ responses = {
     else if typeof options.translate is 'function'
       errorMessage = options.translate(errorMessage)
 
-    payload = {error:errorMessage}
+    responseError = new ResponseError(errorMessage, statusCode)
 
     if process.env.NODE_ENV isnt 'production' or @req.query.debug or options.stackLogging
-      payload.stack = error.stack
-    if options.curlify
-      payload.curl = curlify(@req)
+      responseError.stack = error.stack
     if process.env.RESPONSE_ERROR_LOGGING or options.logging
-      console.error('ResponseError',payload)
+      console.error(responseError.toString())
 
-    @status(statusCode).send(payload)
+    throw responseError
+#    @status(statusCode).send(payload)
 
   unauthorized:(message)->
     @error(message,401)
@@ -87,3 +88,5 @@ module.exports = (options = {})->
       res[name] = responseHandler
 
     next()
+
+module.exports.ResponseError = ResponseError
