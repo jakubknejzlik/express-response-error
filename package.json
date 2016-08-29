@@ -1,6 +1,6 @@
 {
   "name": "express-response-error",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convenience methods for error responses wrapped in express middleware.",
   "main": "index.js",
   "scripts": {
