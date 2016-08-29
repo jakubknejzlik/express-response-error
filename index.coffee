@@ -1,4 +1,4 @@
-curlify = require('request-as-curl')
+errorHandler = require('express-async-error').Handler
 
 class ResponseError extends Error
   constructor: (@message, @code = 400)->
@@ -81,6 +81,7 @@ responses = {
 
 module.exports = (options = {})->
   return (req,res,next)->
+    errorHandler(req,res,next)
 
     req._responseErrorOptions = options
 
